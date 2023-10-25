@@ -1,0 +1,44 @@
+﻿<Window x:Class="DynamicDataGrid.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" mc:Ignorable="d"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:local="clr-namespace:DynamicDataGrid"
+        xmlns:b="clr-namespace:DynamicDataGrid.Behaviors"
+        xmlns:vm="clr-namespace:DynamicDataGrid.ViewModels"
+        DataContext="{vm:MainViewModel}"
+        Title="{Binding Title}" 
+        Width="800" Height="450">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <Button DockPanel.Dock="Right" Content="Remove" Command="{Binding RemoveCommand}" CommandParameter="{Binding SelectedFile}"/>
+            <Button DockPanel.Dock="Right" Content="Add" Command="{Binding AddCommand}"/>
+            <Button DockPanel.Dock="Right" Content="FillGrid" Command="{Binding FillGridCommand}" Margin="2 0" />
+            <Button DockPanel.Dock="Right" Content= "Change root folder" Command= "{Binding ChangeRootFolderCommand}" Margin= "2 0" />
+            <UniformGrid Rows="1">
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Left" Text="Title:" Margin="5,0,2,0"/>
+                    <TextBox Text="{Binding NewFileName}"/>
+                </DockPanel>
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Left" Text="Path:" Margin="5,0,2,0"/>
+                    <TextBox Text="{Binding NewFilePath}"/>
+                </DockPanel>
+            </UniformGrid>
+        </DockPanel>
+        <DataGrid DockPanel.Dock="Top" ItemsSource="{Binding FilesCollectionView, UpdateSourceTrigger=PropertyChanged, 
+                                NotifyOnSourceUpdated=True}"  
+                  SelectedItem="{Binding SelectedFile}">
+            <i:Interaction.Behaviors>
+                <b:DynamicColumnsBehavior/>
+            </i:Interaction.Behaviors>
+        </DataGrid>
+        <DataGrid  DockPanel.Dock="Top"  ItemsSource="{Binding FilesCollectionView}"  
+                  SelectedItem="{Binding SelectedFile}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="FilePath" Binding="{Binding FilePath}" Width="Auto"/>                
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
